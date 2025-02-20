@@ -14,7 +14,7 @@ app.use('/api', router);
 
 // Root route
 app.get('/', (req, res) => {
-    res.send("Welcome to Agro 360 v3 🚜");
+    res.send("Welcome to Agro 360 v4");
 });
 
 // Start server only after MongoDB is connected
@@ -25,3 +25,5 @@ connectDB().then(() => {
 }).catch((error) => {
     console.error(" Server startup failed due to DB connection issue:", error);
 });
+
+module.exports = app;
