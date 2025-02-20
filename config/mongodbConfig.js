@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
 
-const MONGODB_URL = "mongodb+srv://dbsmartagro:Abhishek@cluster0.71bqh.mongodb.net/dbsmartagro";
+const MONGODB_URL = "mongodb+srv://lalit:agro360@cluster0.rvjch.mongodb.net/dbAgro360";
 
 exports.connect = () => {
     mongoose
