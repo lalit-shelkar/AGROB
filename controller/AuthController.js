@@ -45,7 +45,7 @@ const signupcontroller = async (req, res) => {
         const { mobNumber } = req.body;
 
         // Check if user already exists
-        const existingUser = await USER.findOne({ mobNumber }).lean();
+        const existingUser = await USER.findOne({ mobNumber });
         if (existingUser) {
             return res.status(400).json({ message: 'User already exists try login with pin' });
         }

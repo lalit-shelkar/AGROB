@@ -26,4 +26,4 @@ connectDB().then(() => {
     console.error(" Server startup failed due to DB connection issue:", error);
 });
 
-module.exports = app;
+//module.exports = app;
