@@ -45,10 +45,10 @@ const signupcontroller = async (req, res) => {
         const { mobNumber } = req.body;
 
         // Check if user already exists
-        const existingUser = await USER.findOne({ mobNumber }).lean();
-        if (existingUser) {
-            return res.status(400).json({ message: 'User already exists try login with pin' });
-        }
+        //const existingUser = await USER.findOne({ mobNumber }).lean();
+        // if (existingUser) {
+        //     return res.status(400).json({ message: 'User already exists try login with pin' });
+        // }
 
 
         // Generate OTP and expiration time
