@@ -15,7 +15,7 @@ app.use('/api', router);
 
 // Root route
 app.get('/', (req, res) => {
-    res.send("Welcome to Agro 360 v5");
+    res.send("Welcome to Agro 360 v6");
 });
 
 
