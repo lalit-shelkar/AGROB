@@ -38,7 +38,7 @@ const sendOtp = async (mobNumber, otp) => {
 };
 
 // **Signup Controller (Only sends OTP)**
-exports.signupcontroller = async (req, res) => {
+const signupcontroller = async (req, res) => {
     try {
         console.log("Signup request received:", req.body);
 
@@ -162,4 +162,9 @@ exports.loginController = async (req, res) => {
         console.error(error);
         return res.status(500).json({ message: 'Something went wrong. Please try again later.' });
     }
+};
+
+
+module.exports = {
+    signupcontroller
 };
