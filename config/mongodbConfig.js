@@ -1,16 +1,15 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+require("dotenv").config();
 
-const connectDB = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URI, { // Prevent buffering issues
+const MONGODB_URL = "mongodb+srv://dbsmartagro:Abhishek@cluster0.71bqh.mongodb.net/dbsmartagro";
+
+exports.connect = () => {
+    mongoose
+        .connect(MONGODB_URL)
+        .then(console.log(`DB Connection Success`))
+        .catch((err) => {
+            console.log(`DB Connection Failed`);
+            console.log(err);
+            process.exit(1);
         });
-
-        console.log(" MongoDB Connected Successfully!");
-    } catch (error) {
-        console.error(" MongoDB Connection Failed:", error);
-        process.exit(1); // Exit process if connection fails
-    }
 };
-
-module.exports = connectDB;

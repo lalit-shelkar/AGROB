@@ -5,6 +5,7 @@ const router = require('./routes/router');
 
 const app = express();
 const port = process.env.PORT || 5000;
+connectDB.connect();
 
 // Middleware
 app.use(express.json());
@@ -17,13 +18,11 @@ app.get('/', (req, res) => {
     res.send("Welcome to Agro 360 v4");
 });
 
-// Start server only after MongoDB is connected
-connectDB().then(() => {
-    app.listen(port, () => {
-        console.log(` Server running at: http://localhost:${port}`);
-    });
-}).catch((error) => {
-    console.error(" Server startup failed due to DB connection issue:", error);
+
+app.listen(port, () => {
+    console.log(` Server running at: http://localhost:${port}`);
 });
+// Start server only after MongoDB is connected
+
 
 //module.exports = app;
