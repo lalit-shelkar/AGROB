@@ -1,38 +1,32 @@
+require('dotenv').config();
 const express = require('express');
-const app = express();
-//require('./controllers/jobCron'); // Adjust the path to your cron job file
-
-
-const dotenv = require('dotenv').config();
-
-const port = process.env.PORT;
-const router = require('./routes/router');
-//const cookieParser = require('cookie-parser');
 const connectDB = require('./config/mongodbConfig');
+const router = require('./routes/router');
 
+const app = express();
+const port = process.env.PORT || 9000; // Use default port 5000 if not specified
+
+// Connect to MongoDB
 connectDB();
 
+// Middleware
+app.use(express.json()); // Handle JSON requests
 
-// Middleware to handle JSON requests
-//app.use(cookieParser());
-app.use(express.json());
-
-/*app.use((req, res, next) => {
-    if (process.env.APP_MAINTENANCE_MODE === "true") {
-        return res.status(503).send("🚧 Service is temporarily paused. Check back soon! 🚧");
-    }
-    next();
-});*/
-
+// Routes
 app.use('/api', router);
 
-
-// Basic route
+// Root route
 app.get('/', (req, res) => {
-    res.send("Welcome to Agro 360 v3");
+    res.send("Welcome to Agro 360 v3 🚜");
+});
+
+// Global error handler (prevents app crashes)
+app.use((err, req, res, next) => {
+    console.error("Internal Server Error:", err);
+    res.status(500).json({ message: "Something went wrong on our end." });
 });
 
 // Start the server
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server running at: http://localhost:${port}`);
 });
