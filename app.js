@@ -2,11 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/mongodbConfig');
 const router = require('./routes/router');
+const path = require("path");
+
 
 const app = express();
 const port = process.env.PORT || 5000;
 connectDB.connect();
 
+app.use(express.static(path.join(__dirname, "public")));
 // Middleware
 app.use(express.json());
 
