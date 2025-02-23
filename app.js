@@ -17,8 +17,33 @@ app.use(express.json());
 app.use('/api', router);
 
 // Root route
-app.get('/', (req, res) => {
-    res.send("Welcome to Agro 360 v7");
+app.get("/", (req, res) => {
+    res.send(`
+        <html>
+        <head>
+            <title>Agro 360</title>
+            <style>
+                body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+                h1 { color: green; }
+                .container { max-width: 600px; margin: auto; }
+                .contact { margin-top: 20px; font-size: 18px; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Welcome to Agro 360</h1>
+                <p>Your trusted platform for agricultural solutions.</p>
+                <h3>OTP Verification Proof</h3>
+                <p>We use OTP verification to ensure secure access. <br> Check <a href="/fast2sms_verify.txt">this file</a> for ownership verification.</p>
+                <div class="contact">
+                    <h3>Contact Us</h3>
+                    <p>Email: lalitshelkar2424@gmail.com</p>
+                    <p>Phone: +91-7385624021</p>
+                </div>
+            </div>
+        </body>
+        </html>
+    `);
 });
 
 
