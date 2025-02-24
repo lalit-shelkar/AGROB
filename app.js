@@ -34,7 +34,7 @@ app.get("/", (req, res) => {
                 <h1>Welcome to Agro 360</h1>
                 <p>Your trusted platform for agricultural solutions.</p>
                 <p>This is an academic project designed to help farmers with agricultural solutions.</p>
-                <h3>OTP Verification Proof</h3>
+                <h3>OTP Verification Proof *** PLZ TRY REFRESHING IN CASE OF PAGE NOT LOAING</h3>
                 <p>We use OTP verification to ensure secure access. <br> Check <a href="/fast2sms_verify.txt">this file</a> for ownership verification.</p>
                 <div class="contact">
                     <h3>Contact Us</h3>
