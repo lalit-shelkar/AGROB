@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping Base URL
-        run: curl -s https://agrob-git-main-lalit-shelkars-projects.vercel.app > /dev/null
+        run: curl -s https://agrob-lalit-shelkars-projects.vercel.app > /dev/null
       
       - name: Ping fast2sms_verify.txt Route
-        run: curl -s https://agrob-git-main-lalit-shelkars-projects.vercel.app/fast2sms_verify.txt > /dev/null
+        run: curl -s https://agrob-lalit-shelkars-projects.vercel.app/fast2sms_verify.txt > /dev/null
