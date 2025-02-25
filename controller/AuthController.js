@@ -129,7 +129,7 @@ const verifyOtpController = async (req, res) => {
 
 
 // **Login Controller (Authenticate User with PIN)**
-exports.loginController = async (req, res) => {
+const loginController = async (req, res) => {
     try {
         const { mobNumber, pin } = req.body;
 
@@ -167,5 +167,6 @@ exports.loginController = async (req, res) => {
 
 module.exports = {
     signupcontroller,
-    verifyOtpController
+    verifyOtpController,
+    loginController
 };
