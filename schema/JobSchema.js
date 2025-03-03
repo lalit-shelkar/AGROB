@@ -31,6 +31,10 @@ const jobSchema = new mongoose.Schema({
         coordinates: {
             lat: { type: Number },  // Latitude
             lon: { type: Number }   // Longitude
+        },
+        geoPoint: {
+            type: { type: String, enum: ['Point'], default: 'Point' },  // Required for geospatial queries
+            coordinates: { type: [Number], index: '2dsphere' } // [longitude, latitude]
         }
     },
     workDate: { type: Date, required: true },
@@ -43,7 +47,6 @@ const jobSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Create a geospatial index on coordinates for efficient searching
-jobSchema.index({ "location.coordinates": "2dsphere" });
-
+jobSchema.index({ 'location.geoPoint': '2dsphere' });
 const JOB = mongoose.model('JOB', jobSchema);
 module.exports = JOB;

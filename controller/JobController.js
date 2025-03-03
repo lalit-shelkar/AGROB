@@ -60,7 +60,6 @@ async function getCoordinates({ district, taluka, village }) {
 }
 
 
-// ✅ Create a new job
 const createJob = async (req, res) => {
     try {
         const { userId, title, description, location, workDate, wageType, duration, contact, workersNeeded, jobType } = req.body;
@@ -72,12 +71,19 @@ const createJob = async (req, res) => {
 
         const coordinates = await getCoordinates(location);
         console.log(coordinates);
+
+        const geoPoint = coordinates.lat && coordinates.lon ? {
+            type: "Point",
+            coordinates: [parseFloat(coordinates.lon), parseFloat(coordinates.lat)]  // MongoDB requires [longitude, latitude] order
+        } : null;
+
         const newJob = new JOB({
             title,
             description,
             location: {
                 ...location,
-                coordinates: coordinates || { lat: null, lon: null }
+                coordinates: coordinates || { lat: null, lon: null },
+                geoPoint: geoPoint // ✅ Added without affecting existing logic
             },
             workDate,
             wageType,
@@ -99,6 +105,7 @@ const createJob = async (req, res) => {
     }
 };
 
+
 // ✅ Fetch all jobs
 const getAllJobs = async (req, res) => {
     try {
@@ -119,8 +126,34 @@ const getJobsByUser = async (req, res) => {
     }
 };
 
+const nearestJobs = async (req, res) => {
+    try {
+        const { lat, lon } = req.body; // Accepting from request body
+
+        if (!lat || !lon) {
+            return res.status(400).json({ error: "Latitude and Longitude are required" });
+        }
+
+        const jobs = await JOB.find({
+            "location.geoPoint": {
+                $near: {
+                    $geometry: { type: "Point", coordinates: [parseFloat(lon), parseFloat(lat)] },
+                    $maxDistance: 20000 // Default: 20 km
+                }
+            }
+        });
+
+        res.status(200).json(jobs);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
+
 module.exports = {
     createJob,
     getAllJobs,
-    getJobsByUser
+    getJobsByUser,
+    nearestJobs
 };
