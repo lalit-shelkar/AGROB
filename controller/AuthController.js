@@ -153,9 +153,7 @@ const loginController = async (req, res) => {
         // Successful login
         return res.status(200).json({
             message: 'Login successful!',
-            userId: user._id,  // Returning user ID (optional)
-            name: user.name,
-            mobNumber: user.mobNumber,
+            user: user,  // Returning user
         });
 
     } catch (error) {
