@@ -9,7 +9,7 @@ router.post("/login", loginController);
 router.post('/createJob', createJob);
 router.get('/getAllJobs', getAllJobs);
 router.get('/user/:userId', getJobsByUser);
-router.get('/jobs/near', nearestJobs);
+router.post('/jobs/near', nearestJobs);
 
 
 module.exports = router;

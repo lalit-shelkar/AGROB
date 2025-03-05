@@ -128,17 +128,17 @@ const getJobsByUser = async (req, res) => {
 
 const nearestJobs = async (req, res) => {
     try {
-        const { lat, lon } = req.body; // Accepting from request body
-
-        if (!lat || !lon) {
+        const { location } = req.body; // Accepting from request body
+        const coordinates = await getCoordinates(location);
+        if (!coordinates.lat || !coordinates.lon) {
             return res.status(400).json({ error: "Latitude and Longitude are required" });
         }
 
         const jobs = await JOB.find({
             "location.geoPoint": {
                 $near: {
-                    $geometry: { type: "Point", coordinates: [parseFloat(lon), parseFloat(lat)] },
-                    $maxDistance: 20000 // Default: 20 km
+                    $geometry: { type: "Point", coordinates: [parseFloat(coordinates.lon), parseFloat(coordinates.lat)] },
+                    $maxDistance: 40000 // Default: 20 km
                 }
             }
         });
