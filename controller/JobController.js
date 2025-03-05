@@ -151,9 +151,49 @@ const nearestJobs = async (req, res) => {
 
 
 
+
+//apply
+const applyJob = async (req, res) => {
+    const { userId, jobId } = req.body;  // Extract userId and jobId from request body
+
+    try {
+        const job = await JOB.findById(jobId);
+        if (!job) return res.status(404).json({ message: "Job not found" });
+
+        // Prevent job creator from applying
+        if (job.createdBy.toString() === userId)
+            return res.status(400).json({ message: "You cannot apply to your own job" });
+
+        // Check if user already applied
+        const user = await USER.findById(userId);
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        if (user.appliedJobs.includes(jobId))
+            return res.status(400).json({ message: "You have already applied to this job" });
+
+        // Check if all positions are filled
+        if (job.currentApplicants >= job.workersNeeded)
+            return res.status(400).json({ message: "Job application is full" });
+
+        // Update User schema
+        user.appliedJobs.push(jobId);
+        await user.save();
+
+        // Update Job schema
+        job.currentApplicants += 1;
+        await job.save();
+
+        res.status(200).json({ message: "Application successful" });
+
+    } catch (err) {
+        res.status(500).json({ message: "Server error", error: err.message });
+    }
+};
+
 module.exports = {
     createJob,
     getAllJobs,
     getJobsByUser,
-    nearestJobs
+    nearestJobs,
+    applyJob
 };

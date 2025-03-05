@@ -43,7 +43,8 @@ const jobSchema = new mongoose.Schema({
     contact: { type: String, required: true },
     workersNeeded: { type: Number, required: true },
     jobType: { type: String, required: true },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'USER', required: true }
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'USER', required: true },
+    currentApplicants: { type: Number, default: 0 },
 }, { timestamps: true });
 
 // Create a geospatial index on coordinates for efficient searching
