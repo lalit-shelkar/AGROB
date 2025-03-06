@@ -233,42 +233,27 @@ const applyJob = async (req, res) => {
 
 
 
-const mongoose = require('mongoose');
-
 const getApplicantsForJob = async (req, res) => {
     try {
-        const { jobId } = req.body;
+        const mongoose = require('mongoose');
 
-        if (!jobId) return res.status(400).json({ message: 'Job ID is required' });
+        const jobId = "67c803cff30960e19d28fea1"; // Example Job ID
 
-        if (!mongoose.Types.ObjectId.isValid(jobId)) {
-            return res.status(400).json({ message: 'Invalid Job ID format' });
-        }
+        // Ensure jobId is an ObjectId
+        const objectId = mongoose.isValidObjectId(jobId) ? new mongoose.Types.ObjectId(jobId) : jobId;
 
-        const jobObjectId = new mongoose.Types.ObjectId(jobId);
-
-        // 🔍 Find users who have applied (handle both ObjectId and string cases)
+        // Find users who have applied for this job using $in for array matching
         const applicants = await USER.find({
-            $or: [
-                { appliedJobs: jobObjectId },      // If stored as ObjectId
-                { appliedJobs: jobId }            // If stored as a string
-            ]
-        }).select('name mobNumber district taluka village').lean();
-
-        console.log("[log] jobId ::::::", jobId);
-        console.log("[log] applicants ::::::", applicants);
+            appliedJobs: { $in: [objectId] } // Ensuring proper ObjectId format
+        }).select("name mobNumber district taluka village")
+            .lean();
 
         res.status(200).json({ jobId, applicants });
-
     } catch (error) {
-        console.error('❌ Error fetching applicants:', error);
-        res.status(500).json({ message: 'Server error', error });
+        console.error("❌ Error fetching applicants:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 };
-
-
-
-
 
 
 module.exports = {
