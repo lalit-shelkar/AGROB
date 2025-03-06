@@ -134,6 +134,10 @@ const nearestJobs = async (req, res) => {
             return res.status(400).json({ error: "Latitude and Longitude are required" });
         }
 
+        // Fetch user's applied job IDs
+        const user = await USER.findById(userId).select("appliedJobs");
+        const appliedJobIds = user?.appliedJobs || [];
+
         const jobs = await JOB.find({
             "location.geoPoint": {
                 $near: {
@@ -141,7 +145,8 @@ const nearestJobs = async (req, res) => {
                     $maxDistance: 40000 // Default: 20 km
                 }
             },
-            createdBy: { $ne: userId }// excluding post created by user 
+            createdBy: { $ne: userId },// excluding post created by user 
+            _id: { $nin: appliedJobIds } // Exclude jobs already applied for
         });
 
         res.status(200).json(jobs);
