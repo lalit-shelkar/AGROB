@@ -116,15 +116,47 @@ const getAllJobs = async (req, res) => {
     }
 };
 
+
+const getAppliedJobsByUser = async (req, res) => {
+    try {
+        const { userId } = req.body; // Extract userId from request body
+
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
+
+        // Fetch user's applied jobs
+        const user = await USER.findById(userId).select("appliedJobs");
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Fetch jobs using the appliedJobs array
+        const jobs = await JOB.find({ _id: { $in: user.appliedJobs } });
+
+        res.status(200).json(jobs);
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
+
+
 // ✅ Fetch jobs by user ID
 const getJobsByUser = async (req, res) => {
     try {
-        const jobs = await JOB.find({ createdBy: req.params.userId });
+        const { userId } = req.body; // Extract userId from request body
+
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
+
+        const jobs = await JOB.find({ createdBy: userId });
         res.status(200).json(jobs);
     } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 };
+
 
 const nearestJobs = async (req, res) => {
     try {
