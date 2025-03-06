@@ -237,23 +237,28 @@ const getApplicantsForJob = async (req, res) => {
     try {
         const { jobId } = req.body;
 
+        if (!jobId) {
+            return res.status(400).json({ message: "Job ID is required" });
+        }
+
         // Find the job by ID
         const job = await JOB.findById(jobId);
         if (!job) {
-            return res.status(404).json({ message: 'Job not found' });
+            return res.status(404).json({ message: "Job not found" });
         }
 
-        // Find users who have applied for this job
-        const applicants = await USER.find({ appliedJobs: jobId })
-            .select('name mobNumber district taluka village') // Select relevant fields
+        // Find users who have applied for this job using $in for array matching
+        const applicants = await USER.find({ appliedJobs: { $in: [jobId] } })
+            .select("name mobNumber district taluka village")
             .lean();
 
         res.status(200).json({ jobId, applicants });
     } catch (error) {
-        console.error('Error fetching applicants:', error);
-        res.status(500).json({ message: 'Server error', error });
+        console.error(" Error fetching applicants:", error);
+        res.status(500).json({ message: "Server error", error: error.message });
     }
 };
+
 
 module.exports = {
     createJob,
