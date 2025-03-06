@@ -233,31 +233,40 @@ const applyJob = async (req, res) => {
 
 
 
+const mongoose = require('mongoose');
+
 const getApplicantsForJob = async (req, res) => {
     try {
         const { jobId } = req.body;
 
         if (!jobId) {
-            return res.status(400).json({ message: "Job ID is required" });
+            return res.status(400).json({ message: 'Job ID is required' });
         }
 
-        // Find the job by ID
-        const job = await JOB.findById(jobId);
+        // Convert jobId to ObjectId if it's a valid format
+        const jobObjectId = mongoose.Types.ObjectId.isValid(jobId) ? new mongoose.Types.ObjectId(jobId) : null;
+        if (!jobObjectId) {
+            return res.status(400).json({ message: 'Invalid Job ID' });
+        }
+
+        // Check if the job exists
+        const job = await JOB.findById(jobObjectId);
         if (!job) {
-            return res.status(404).json({ message: "Job not found" });
+            return res.status(404).json({ message: 'Job not found' });
         }
 
-        // Find users who have applied for this job using $in for array matching
-        const applicants = await USER.find({ appliedJobs: { $in: [jobId] } })
-            .select("name mobNumber district taluka village")
+        // Find users who have applied for this job
+        const applicants = await USER.find({ appliedJobs: jobObjectId })
+            .select('name mobNumber district taluka village') // Select relevant fields
             .lean();
 
         res.status(200).json({ jobId, applicants });
     } catch (error) {
-        console.error(" Error fetching applicants:", error);
-        res.status(500).json({ message: "Server error", error: error.message });
+        console.error('Error fetching applicants:', error);
+        res.status(500).json({ message: 'Server error', error });
     }
 };
+
 
 
 module.exports = {
