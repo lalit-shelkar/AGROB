@@ -11,7 +11,7 @@ router.post("/login", loginController);
 
 router.post('/createJob', createJob);
 router.get('/getAllJobs', getAllJobs);
-router.get('/user/posts', getJobsByUser);
+router.post('/user/posts', getJobsByUser);
 router.post('/jobs/near', nearestJobs);
 router.post('/job/apply', applyJob);
 
