@@ -241,6 +241,7 @@ const getApplicantsForJob = async (req, res) => {
 
         // Ensure jobId is an ObjectId
         const objectId = mongoose.isValidObjectId(jobId) ? new mongoose.Types.ObjectId(jobId) : jobId;
+        console.log("Searching for jobId:", objectId);
 
         // Find users who have applied for this job using $in for array matching
         const applicants = await USER.find({
