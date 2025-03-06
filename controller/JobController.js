@@ -128,7 +128,7 @@ const getJobsByUser = async (req, res) => {
 
 const nearestJobs = async (req, res) => {
     try {
-        const { location } = req.body; // Accepting from request body
+        const { location, userId } = req.body; // Accepting from request body
         const coordinates = await getCoordinates(location);
         if (!coordinates.lat || !coordinates.lon) {
             return res.status(400).json({ error: "Latitude and Longitude are required" });
@@ -140,7 +140,8 @@ const nearestJobs = async (req, res) => {
                     $geometry: { type: "Point", coordinates: [parseFloat(coordinates.lon), parseFloat(coordinates.lat)] },
                     $maxDistance: 40000 // Default: 20 km
                 }
-            }
+            },
+            createdBy: { $ne: userId }// excluding post created by user 
         });
 
         res.status(200).json(jobs);
