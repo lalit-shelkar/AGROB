@@ -146,7 +146,8 @@ const nearestJobs = async (req, res) => {
                 }
             },
             createdBy: { $ne: userId },// excluding post created by user 
-            _id: { $nin: appliedJobIds } // Exclude jobs already applied for
+            _id: { $nin: appliedJobIds },// Exclude jobs already applied for
+            $expr: { $lt: ["$currentApplicants", "$workersNeeded"] } // Exclude full jobs
         });
 
         res.status(200).json(jobs);
