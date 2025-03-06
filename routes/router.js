@@ -14,7 +14,7 @@ router.get('/getAllJobs', getAllJobs);
 router.post('/user/posts', getJobsByUser);
 router.post('/jobs/near', nearestJobs);
 router.post('/job/apply', applyJob);
-router.post('/job/viewApplicants', getApplicantsForJob);
+router.post('/viewApplicants', getApplicantsForJob);
 
 
 
