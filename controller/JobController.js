@@ -247,9 +247,12 @@ const getApplicantsForJob = async (req, res) => {
 
         const jobObjectId = new mongoose.Types.ObjectId(jobId);
 
-        // 🔍 Find users who have applied to this job
+        // 🔍 Find users who have applied (handle both ObjectId and string cases)
         const applicants = await USER.find({
-            appliedJobs: { $in: [jobObjectId, jobId] }  // Support both ObjectId and string values
+            $or: [
+                { appliedJobs: jobObjectId },      // If stored as ObjectId
+                { appliedJobs: jobId }            // If stored as a string
+            ]
         }).select('name mobNumber district taluka village').lean();
 
         console.log("[log] jobId ::::::", jobId);
@@ -263,7 +266,7 @@ const getApplicantsForJob = async (req, res) => {
     }
 };
 
-module.exports = getApplicantsForJob;
+
 
 
 
