@@ -75,7 +75,8 @@ const signupcontroller = async (req, res) => {
 // **OTP Verification Controller (Registers User with PIN)**
 const verifyOtpController = async (req, res) => {
     try {
-        const { mobNumber, otp, name, state, district, taluka, village, pin } = req.body;
+        // const { mobNumber, otp, name, state, district, taluka, village, pin } = req.body;
+        const { mobNumber, name, state, district, taluka, village, pin } = req.body;
 
         // Validate pin (must be a 4-digit number)
         if (!/^\d{4}$/.test(pin)) {
@@ -83,22 +84,22 @@ const verifyOtpController = async (req, res) => {
         }
 
         // Check if OTP exists in memory (this is where Redis would come in for better persistence)
-        const storedOtpData = otpStorage[mobNumber];
+        //const storedOtpData = otpStorage[mobNumber];
 
-        if (!storedOtpData) {
-            return res.status(400).json({ message: 'OTP not generated or expired' });
-        }
+        // if (!storedOtpData) {
+        //     return res.status(400).json({ message: 'OTP not generated or expired' });
+        // }
 
         // Check if OTP has expired
-        if (new Date() > storedOtpData.expiresAt) {
-            delete otpStorage[mobNumber];  // Delete expired OTP
-            return res.status(400).json({ message: 'OTP has expired' });
-        }
+        // if (new Date() > storedOtpData.expiresAt) {
+        //     delete otpStorage[mobNumber];  // Delete expired OTP
+        //     return res.status(400).json({ message: 'OTP has expired' });
+        // }
 
         // Verify OTP
-        if (storedOtpData.otp !== otp) {
-            return res.status(400).json({ message: 'Invalid OTP' });
-        }
+        // if (storedOtpData.otp !== otp) {
+        //     return res.status(400).json({ message: 'Invalid OTP' });
+        // }
 
         // OTP is correct and not expired, now save user to the database
         const newUser = new USER({
@@ -114,7 +115,7 @@ const verifyOtpController = async (req, res) => {
         await newUser.save();
 
         // OTP verification success
-        delete otpStorage[mobNumber];  // Clean up OTP after successful verification
+        //delete otpStorage[mobNumber];  // Clean up OTP after successful verification
 
         return res.status(200).json({
             message: 'OTP verified successfully. User registered.',
