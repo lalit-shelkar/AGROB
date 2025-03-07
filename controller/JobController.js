@@ -233,28 +233,70 @@ const applyJob = async (req, res) => {
 
 
 
+const mongoose = require('mongoose');
+
+
 const getApplicantsForJob = async (req, res) => {
     try {
-        const mongoose = require('mongoose');
+        // Extract jobId from request body
+        const { jobId } = req.body;
 
-        const jobId = "67c803cff30960e19d28fea1"; // Example Job ID
+        // 1️⃣ Check if jobId is provided
+        if (!jobId) {
+            return res.status(400).json({ message: "Job ID is required" });
+        }
 
-        // Ensure jobId is an ObjectId
-        const objectId = mongoose.isValidObjectId(jobId) ? new mongoose.Types.ObjectId(jobId) : jobId;
-        console.log("Searching for jobId:", objectId);
+        // 2️⃣ Check if jobId is a valid ObjectId
+        if (!mongoose.isValidObjectId(jobId)) {
+            return res.status(400).json({ message: "Invalid job ID format" });
+        }
 
-        // Find users who have applied for this job using $in for array matching
-        const applicants = await USER.find({
-            appliedJobs: { $in: [objectId] } // Ensuring proper ObjectId format
-        }).select("name mobNumber district taluka village")
-            .lean();
+        console.log("🔍 Searching applicants for jobId:", jobId);
+
+        // 3️⃣ Try querying users with different formats of jobId
+        let applicants = await USER.find({ appliedJobs: jobId });
+
+        // 4️⃣ If no applicants found, try querying with ObjectId
+        if (applicants.length === 0) {
+            console.log("⚠️ No applicants found using jobId as a string. Retrying with ObjectId...");
+            applicants = await USER.find({ appliedJobs: new mongoose.Types.ObjectId(jobId) });
+        }
+
+        // 5️⃣ Final check if applicants exist
+        if (applicants.length === 0) {
+            return res.status(404).json({ message: "No applicants found for this job", jobId, applicants: [] });
+        }
+
+        console.log("✅ Applicants found:", applicants.length);
 
         res.status(200).json({ jobId, applicants });
     } catch (error) {
         console.error("❌ Error fetching applicants:", error);
+
+        // 6️⃣ Handle specific MongoDB errors
+        if (error.name === "CastError") {
+            return res.status(400).json({ message: "Invalid ObjectId format" });
+        }
+
         res.status(500).json({ message: "Server error", error: error.message });
     }
 };
+
+// async function addAppliedJob(userId, jobId) {
+//     try {
+//         const updatedUser = await USER.findByIdAndUpdate(
+//             userId,
+//             { $push: { appliedJobs: new mongoose.Types.ObjectId(jobId) } },
+//             { new: true } // Return the updated user
+//         );
+
+//         console.log("✅ Job added successfully:", updatedUser);
+//     } catch (error) {
+//         console.error("❌ Error updating user:", error);
+//     }
+// }
+//addAppliedJob("67b7275291e61944c6a92716", "67c803cff30960e19d28fea1");
+
 
 
 module.exports = {
