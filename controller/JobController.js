@@ -297,6 +297,48 @@ const getApplicantsForJob = async (req, res) => {
 // }
 //addAppliedJob("67b7275291e61944c6a92716", "67c803cff30960e19d28fea1");
 
+// Withdraw application from a job
+const withdrawApplication = async (req, res) => {
+    const { userId, jobId } = req.body;
+
+    try {
+        // Validate input
+        if (!userId || !jobId) {
+            return res.status(400).json({ message: "Both userId and jobId are required" });
+        }
+
+        // Check if user exists
+        const user = await USER.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Check if job exists
+        const job = await JOB.findById(jobId);
+        if (!job) {
+            return res.status(404).json({ message: "Job not found" });
+        }
+
+        // Check if user has applied to this job
+        if (!user.appliedJobs.includes(jobId)) {
+            return res.status(400).json({ message: "You haven't applied to this job" });
+        }
+
+        // Withdraw application
+        user.appliedJobs.pull(jobId);
+        await user.save();
+
+        // Decrement applicant count (only if user was counted)
+        if (job.currentApplicants > 0) {
+            job.currentApplicants -= 1;
+            await job.save();
+        }
+
+        res.status(200).json({ message: "Application withdrawn successfully" });
+    } catch (error) {
+        res.status(500).json({ message: "Server error", error: error.message });
+    }
+};
 
 
 module.exports = {
@@ -305,5 +347,7 @@ module.exports = {
     getJobsByUser,
     nearestJobs,
     applyJob,
-    getApplicantsForJob
+    getApplicantsForJob,
+    getAppliedJobsByUser,
+    withdrawApplication
 };
