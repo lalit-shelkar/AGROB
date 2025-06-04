@@ -44,7 +44,7 @@ const getAvailableAnimals = async (req, res) => {
 // Get animals listed by current user
 const getMyListedAnimals = async (req, res) => {
     try {
-        const animals = await Animal.find({ user: req.user.id })
+        const animals = await Animal.find({ user: req.body.userId })
             .sort({ createdAt: -1 });
 
         res.json(animals);
@@ -56,7 +56,7 @@ const getMyListedAnimals = async (req, res) => {
 // Get animals bought by current user
 const getMyBoughtAnimals = async (req, res) => {
     try {
-        const animals = await Animal.find({ soldTo: req.user.id })
+        const animals = await Animal.find({ soldTo: req.body.userId })
             .populate('user', 'name contact')
             .sort({ soldAt: -1 });
 
