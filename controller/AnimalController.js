@@ -1,3 +1,4 @@
+// CORRECT (matches file path)
 const Animal = require('../schema/Animal');
 
 
