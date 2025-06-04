@@ -9,7 +9,7 @@ const createAnimal = async (req, res) => {
         const { name, animalType, breed, age, weight, price, description, location } = req.body;
 
         const animal = new Animal({
-            user: req.user.id,
+            user: req.body.userId,
             name,
             animalType,
             breed,
