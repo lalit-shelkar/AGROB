@@ -1,6 +1,7 @@
 const Animal = require('../schema/Animal');
 
 
+
 // Create animal listing
 const createAnimal = async (req, res) => {
     try {
