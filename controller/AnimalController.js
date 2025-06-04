@@ -17,7 +17,7 @@ const createAnimal = async (req, res) => {
             weight: weight ? parseFloat(weight) : undefined,
             price: parseFloat(price),
             description,
-            location: JSON.parse(location),
+            location: location,
             image: req.body.image // Cloudinary URL from client
         });
 
