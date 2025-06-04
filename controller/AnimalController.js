@@ -1,4 +1,4 @@
-const Animal = require('../models/Animal');
+const Animal = require('../schema/Animal');
 
 
 // Create animal listing
