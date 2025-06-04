@@ -23,8 +23,8 @@ router.post('/job/withdraw', withdrawApplication);
 
 router.post('/createAnimal', createAnimal);
 router.get('/available', getAvailableAnimals);
-router.get('/my-listings', getMyListedAnimals);
-router.get('/my-purchases', getMyBoughtAnimals);
+router.post('/my-listings', getMyListedAnimals);
+router.post('/my-purchases', getMyBoughtAnimals);
 router.put('/:id/buy', buyAnimal);
 router.get('/:id', getAnimalDetails);
 
