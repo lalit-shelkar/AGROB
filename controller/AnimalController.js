@@ -57,7 +57,7 @@ const getMyListedAnimals = async (req, res) => {
 const getMyBoughtAnimals = async (req, res) => {
     try {
         const animals = await Animal.find({ soldTo: req.body.userId })
-            .populate('user', 'name mobNumber')
+            .populate({ path: 'user', model: 'USER', select: 'name mobNumber' })
             .sort({ soldAt: -1 });
 
         res.json(animals);
@@ -99,8 +99,8 @@ const buyAnimal = async (req, res) => {
 const getAnimalDetails = async (req, res) => {
     try {
         const animal = await Animal.findById(req.params.id)
-            .populate('user', 'name contact')
-            .populate('soldTo', 'name contact');
+            .populate({ path: 'user', model: 'USER', select: 'name mobNumber' })
+            .populate({ path: 'soldTo', model: 'USER', select: 'name mobNumber' });
 
         if (!animal) {
             return res.status(404).json({ message: 'Animal not found' });
