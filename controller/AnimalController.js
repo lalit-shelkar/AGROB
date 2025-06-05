@@ -84,7 +84,7 @@ const buyAnimal = async (req, res) => {
         }
 
         animal.isSold = true;
-        animal.soldTo = req.user.id;
+        animal.soldTo = req.body.userId;
         animal.soldAt = new Date();
 
         await animal.save();
