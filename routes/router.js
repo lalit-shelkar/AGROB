@@ -22,7 +22,7 @@ router.post('/job/withdraw', withdrawApplication);
 
 
 router.post('/createAnimal', createAnimal);
-router.get('/available', getAvailableAnimals);
+router.post('/available', getAvailableAnimals);
 router.post('/my-listings', getMyListedAnimals);
 router.post('/my-purchases', getMyBoughtAnimals);
 router.put('/:id/buy', buyAnimal);
