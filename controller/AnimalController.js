@@ -69,7 +69,7 @@ const getMyBoughtAnimals = async (req, res) => {
 // Buy an animal
 const buyAnimal = async (req, res) => {
     try {
-        const animal = await Animal.findById(req.params.id);
+        const animal = await Animal.findById(req.body.animalId);
 
         if (!animal) {
             return res.status(404).json({ message: 'Animal not found' });
