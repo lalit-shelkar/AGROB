@@ -32,7 +32,7 @@ const createAnimal = async (req, res) => {
 const getAvailableAnimals = async (req, res) => {
     try {
         const animals = await Animal.find({ isSold: false })
-            .populate('user', 'name contact')
+            .populate('user', 'name mobNumber')
             .sort({ createdAt: -1 });
 
         res.json(animals);
@@ -57,7 +57,7 @@ const getMyListedAnimals = async (req, res) => {
 const getMyBoughtAnimals = async (req, res) => {
     try {
         const animals = await Animal.find({ soldTo: req.body.userId })
-            .populate('user', 'name contact')
+            .populate('user', 'name mobNumber')
             .sort({ soldAt: -1 });
 
         res.json(animals);
