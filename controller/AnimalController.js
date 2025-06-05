@@ -79,7 +79,7 @@ const buyAnimal = async (req, res) => {
             return res.status(400).json({ message: 'Animal already sold' });
         }
 
-        if (animal.user.toString() === req.user.id) {
+        if (animal.user.toString() === req.body.userId) {
             return res.status(400).json({ message: 'You cannot buy your own animal' });
         }
 
