@@ -32,7 +32,7 @@ const createAnimal = async (req, res) => {
 const getAvailableAnimals = async (req, res) => {
     try {
         const animals = await Animal.find({ isSold: false })
-            .populate('user', 'name mobNumber')
+            .populate({ path: 'user', model: 'USER', select: 'name mobNumber' })
             .sort({ createdAt: -1 });
 
         res.json(animals);
