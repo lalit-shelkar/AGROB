@@ -31,7 +31,7 @@ const createAnimal = async (req, res) => {
 // Get all available animals (not sold)
 const getAvailableAnimals = async (req, res) => {
     try {
-        const animals = await Animal.find({ isSold: false })
+        const animals = await Animal.find({ isSold: false, user: { $ne: req.body.userId } })
             .populate({ path: 'user', model: 'USER', select: 'name mobNumber' })
             .sort({ createdAt: -1 });
 
